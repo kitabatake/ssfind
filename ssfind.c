@@ -2,14 +2,15 @@
 #include <dirent.h>
 #include <string.h>
 
-#define MAX_DEPTH 1
+#define MAX_DIR_DEPTH 1
+
+char *searchPattern;
 
 void searchRecursive(char *path, int depth);
 
 int main(int argc, char *argv[])
 {
 	
-	char *searchPattern;
 	
 	if(argc < 2){
 		printf("please specify file search pattern.\n");
@@ -25,7 +26,7 @@ int main(int argc, char *argv[])
 
 void searchRecursive(char *path, int depth){
 	
-	if(depth > MAX_DEPTH){
+	if(depth > MAX_DIR_DEPTH){
 		return;
 	}
 	
@@ -36,14 +37,13 @@ void searchRecursive(char *path, int depth){
 	
 	char childDirName[256];
 	
-	
 	for(dp = readdir(dir); dp != NULL; dp = readdir(dir)){
 		
 		if(strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0){
 			continue;
 		}
 			
-		if(dp->d_type == DT_REG){
+		if(dp->d_type == DT_REG && strstr(dp->d_name, searchPattern) != NULL){
 			//TODO filtering
 			
 			for(int i = 0; i < depth; i++){
