@@ -44,7 +44,6 @@ void searchRecursive(char *path, int depth){
 		}
 			
 		if(dp->d_type == DT_REG && strstr(dp->d_name, searchPattern) != NULL){
-			//TODO filtering
 			
 			for(int i = 0; i < depth; i++){
 				printf("  ");
