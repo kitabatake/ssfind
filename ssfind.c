@@ -104,18 +104,15 @@ void checkFileContent(char *path, char *fileName, int depth){
 	int lineNum = 1;
 	
 	if ((fp = fopen(filePath, "r")) == NULL) {
-		printf("file open error at: %s%s\n", path, fileName);
+		printf("file open error at: %s\n", filePath);
 		return;
 	}
 	
 	while (fgets(buff, 256, fp) != NULL) {
 		
 		if(strstr(buff, searchPattern) != NULL){
-			printf("%*s", depth, "");
-			printf("%s%s (%d)\n",path, fileName, lineNum);
-			printf("%*s", depth, "");
-			printf("  %s", buff);
-			break;
+			printf("%*s%s (%d)\n", depth, "", filePath, lineNum);
+			printf("%*s  %s", depth, "", buff);
 		}
 		
 		lineNum++;
