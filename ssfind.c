@@ -2,7 +2,7 @@
 #include <dirent.h>
 #include <string.h>
 
-#define MAX_DIR_DEPTH 0
+#define MAX_DIR_DEPTH 3
 #define SEARCH_TYPE_NAME 0
 #define SEARCH_TYPE_CONTENT 1
 #define MAX_FILEPATH_LENGTH 100
@@ -88,7 +88,6 @@ void searchRecursive(char *path, int depth){
 void checkFileName(char *path, char *fileName, int depth){
 	
 	if(strstr(fileName, searchPattern) != NULL){
-		printf("%*s", depth, "");
 		printf("%s%s\n",path, fileName);
 	}
 }
@@ -111,8 +110,8 @@ void checkFileContent(char *path, char *fileName, int depth){
 	while (fgets(buff, 256, fp) != NULL) {
 		
 		if(strstr(buff, searchPattern) != NULL){
-			printf("%*s%s (%d)\n", depth, "", filePath, lineNum);
-			printf("%*s  %s", depth, "", buff);
+			printf("%s (%d)\n", filePath, lineNum);
+			printf(" - %s", buff);
 		}
 		
 		lineNum++;
