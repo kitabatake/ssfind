@@ -3,21 +3,40 @@
 #include <string.h>
 
 #define MAX_DIR_DEPTH 1
+#define SEARCH_TYPE_NAME 0
+#define SEARCH_TYPE_CONTENT 1
 
 char *searchPattern;
+int searchType;
 
 void searchRecursive(char *path, int depth);
+void checkFileName(char *path, char *fileName, int depth);
 
 int main(int argc, char *argv[])
 {
+	int correctComandFlag = 1;
 	
+	if(argc != 3){
+		correctComandFlag = 0;
+	}
+	else{
+		if(strcmp(argv[1], "name") == 0){
+			searchType = SEARCH_TYPE_NAME;
+		}
+		else if(strcmp(argv[1], "content") == 0){
+			searchType = SEARCH_TYPE_CONTENT;
+		}
+		else{
+			correctComandFlag = 0;
+		}
+	}
 	
-	if(argc < 2){
-		printf("please specify file search pattern.\n");
+	if(!correctComandFlag){
+		printf("illegal commands specified.\ncorrect comand is following.\nssfind [type name or content] [search word]\n");
 		return 0;
 	}
 	
-	searchPattern = argv[1];
+	searchPattern = argv[2];
 	
 	searchRecursive("./", 0);
 	
@@ -43,13 +62,14 @@ void searchRecursive(char *path, int depth){
 			continue;
 		}
 			
-		if(dp->d_type == DT_REG && strstr(dp->d_name, searchPattern) != NULL){
+		if(dp->d_type == DT_REG ){
 			
-			for(int i = 0; i < depth; i++){
-				printf("  ");
+			if(searchType == SEARCH_TYPE_NAME){
+				checkFileName(path, dp->d_name, depth);
 			}
-			
-			printf("%s%s\n",path, dp->d_name);
+			else{
+				
+			}
 		}
 		else if(dp->d_type == 4){
 			
@@ -61,5 +81,14 @@ void searchRecursive(char *path, int depth){
 	}
 	
 	closedir(dir);
-	
 }
+
+void checkFileName(char *path, char *fileName, int depth){
+	
+	if(strstr(fileName, searchPattern) != NULL){
+		printf("%*s", depth, "");
+		printf("%s%s\n",path, fileName);
+	}
+}
+
+
